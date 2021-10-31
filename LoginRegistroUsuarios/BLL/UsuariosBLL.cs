@@ -33,6 +33,27 @@ namespace LoginRegistroUsuarios.BLL
             return encontrado;
         }
 
+        public static bool ExisteNombre(string nombres, string clave)
+        {
+            bool encontrado = false;
+            var contexto = new Contexto();
+
+            try
+            {
+                encontrado = contexto.Usuarios.Any(e => e.Username == nombres && e.Password == clave);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                contexto.Dispose();
+            }
+            return encontrado;
+        }
+
         public static bool Insertar(Usuarios usuarios)
         {
             var contexto = new Contexto();

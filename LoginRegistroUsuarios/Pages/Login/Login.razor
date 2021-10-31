@@ -2,6 +2,7 @@
 
 @using LoginRegistroUsuarios.Models
 @using LoginRegistroUsuarios.BLL
+@using Microsoft.AspNetCore.Mvc.RazorPages
 
 @inject IToastService toast
 <EditForm Model="Usuario" OnValidSubmit="Buscar">
@@ -13,23 +14,6 @@
             </div>
             <div class="card-body" style="align-self:self-start">
                 <form>
-                    @*UsuarioId*@
-                    <div class="form-row align-items-lg-start">
-                        <div class="col">
-                            <div class="form-inline">
-                                <label><strong>Usuario Id</strong></label>
-                                <hr />
-                                <div class="input-group">
-                                    <hr />
-                                    <InputNumber @bind-Value="Usuario.UsuarioId" class="form-control col-5" />
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-toolbar input-group-text" @onclick="Buscar"><span class="oi oi-magnifying-glass"></span>Buscar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
 
                     @*Username*@
                     <div class="form-row align-items-lg-start">
@@ -63,11 +47,11 @@
                     @*Botones*@
                     <div class="card-footer d-flex flex-column flex-sm-column flex-md-row flex-xl-row flex-lg-row justify-content-around">
                         <div class="form-inline" display: inline-blocks>
-                            <button type="button" class="btn btn-outline-dark" @onclick="Nuevo"><span class="oi oi-file"></span>Nuevo</button>
-                            &nbsp;&nbsp;
-                            <button type="button" class="btn btn-outline-dark" @onclick="Guardar"><span class="oi oi-hard-drive"></span>Guardar</button>
-                            &nbsp;&nbsp;
-                            <button type="button" class="btn btn-outline-dark" @onclick="Eliminar"><span class="oi oi-delete"></span>Eliminar</button>
+                            @if (UsuariosBLL.ExisteNombre(Usuario.Username, Usuario.Password))
+                            {
+                                <button type="button" class="btn btn-outline-dark" @onclick="Log"><span class="oi oi-file"></span>Login</button>
+                            }
+                            &nbsp; &nbsp;
                         </div>
 
                     </div>
@@ -86,13 +70,18 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        Nuevo();
+        Log();
         Buscar();
     }
 
-    public void Nuevo()
+    public void Log()
     {
         Usuario = new Usuarios();
+        /* if (UsuariosBLL.ExisteNombre(Usuario.Username, Usuario.Password))
+         {
+
+         }
+        */
         UsuarioId = 0;
     }
 
