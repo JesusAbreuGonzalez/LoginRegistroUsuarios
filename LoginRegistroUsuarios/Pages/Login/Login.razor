@@ -1,0 +1,115 @@
+﻿@page "/Login"
+
+@using LoginRegistroUsuarios.Models
+@using LoginRegistroUsuarios.BLL
+
+@inject IToastService toast
+<EditForm Model="Usuario" OnValidSubmit="Buscar">
+    <DataAnnotationsValidator />
+    <div class="card p-0 bg-light col-4 col-sm-4 col-md-4 col-lg-4 col-xl-5">
+        <div class="card-header text-center">
+            <div class="card-header">
+                <h3>Registro de Usuarios</h3>
+            </div>
+            <div class="card-body" style="align-self:self-start">
+                <form>
+                    @*UsuarioId*@
+                    <div class="form-row align-items-lg-start">
+                        <div class="col">
+                            <div class="form-inline">
+                                <label><strong>Usuario Id</strong></label>
+                                <hr />
+                                <div class="input-group">
+                                    <hr />
+                                    <InputNumber @bind-Value="Usuario.UsuarioId" class="form-control col-5" />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-toolbar input-group-text" @onclick="Buscar"><span class="oi oi-magnifying-glass"></span>Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    @*Username*@
+                    <div class="form-row align-items-lg-start">
+                        <div class="col">
+                            <div class="form-inline">
+                                <label><strong>Username</strong></label>
+                                <hr />
+                                <div class="input-group">
+                                    <InputText @bind-Value="Usuario.Username" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    @*Password*@
+                    <div class="form-row align-items-lg-start">
+                        <div class="col">
+                            <div class="form-inline">
+                                <label><strong>Password</strong></label>
+                                <hr />
+                                <div class="input-group">
+                                    <InputText @bind-Value="Usuario.Password" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    @*Botones*@
+                    <div class="card-footer d-flex flex-column flex-sm-column flex-md-row flex-xl-row flex-lg-row justify-content-around">
+                        <div class="form-inline" display: inline-blocks>
+                            <button type="button" class="btn btn-outline-dark" @onclick="Nuevo"><span class="oi oi-file"></span>Nuevo</button>
+                            &nbsp;&nbsp;
+                            <button type="button" class="btn btn-outline-dark" @onclick="Guardar"><span class="oi oi-hard-drive"></span>Guardar</button>
+                            &nbsp;&nbsp;
+                            <button type="button" class="btn btn-outline-dark" @onclick="Eliminar"><span class="oi oi-delete"></span>Eliminar</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int UsuarioId { get; set; }
+
+    private Usuarios Usuario { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Nuevo();
+        Buscar();
+    }
+
+    public void Nuevo()
+    {
+        Usuario = new Usuarios();
+        UsuarioId = 0;
+    }
+
+
+    public void Buscar()
+    {
+        if (Usuario.UsuarioId > 0)
+        {
+            var encontrado = UsuariosBLL.Buscar(Usuario.UsuarioId);
+            if (encontrado != null)
+            {
+                this.Usuario = encontrado;
+            }
+            else
+            {
+                toast.ShowWarning("No Encontrado");
+            }
+        }
+    }
+}

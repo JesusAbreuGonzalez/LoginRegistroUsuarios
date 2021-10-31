@@ -96,11 +96,6 @@ namespace LoginRegistroUsuarios.BLL
             {
                 var usuarios = contexto.Usuarios.Find(id);
 
-                if (usuarios != null)
-                {
-                    contexto.Usuarios.Remove(usuarios);
-                    eliminado = contexto.SaveChanges() > 0;
-                }
             }
             catch (Exception)
             {
@@ -114,11 +109,11 @@ namespace LoginRegistroUsuarios.BLL
         public static Usuarios Buscar(int UsuarioId)
         {
             Contexto contexto = new Contexto();
-            Usuarios persona;
+            Usuarios usuarios;
 
             try
             {
-                persona = contexto.Usuarios.Where(p => p.UsuarioId == UsuarioId).FirstOrDefault();
+                usuarios = contexto.Usuarios.Find(UsuarioId);
             }
             catch (Exception)
             {
@@ -129,7 +124,7 @@ namespace LoginRegistroUsuarios.BLL
                 contexto.Dispose();
             }
 
-            return persona;
+            return usuarios;
         }
 
         public static List<Usuarios> GetList(Expression<Func<Usuarios, bool>> criterio)
